@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ورود به هات‌اسپات</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Tahoma', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: right;
+            direction: rtl;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+        .otp-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .otp-row input {
+            flex: 1;
+        }
+        .otp-row button {
+            width: auto;
+            padding: 12px 20px;
+            margin-top: 0;
+            background: #3498db;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        .otp-row button:hover {
+            background: #2980b9;
+        }
+        .btn-main {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+        .btn-main:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-main:active {
+            transform: translateY(0);
+        }
+        .hint {
+            font-size: 12px;
+            color: #999;
+            margin-top: 20px;
+        }
+        .message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+        .message.error {
+            display: block;
+            color: #e74c3c;
+            background: #fde8e8;
+        }
+        .message.success {
+            display: block;
+            color: #27ae60;
+            background: #e8f8e8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 ورود به هات‌اسپات</h1>
+        <p class="subtitle">لطفاً شماره موبایل خود را وارد کنید</p>
+
+        <div id="messageBox" class="message"></div>
+
+        <form id="loginForm" onsubmit="return false;">
+            <div class="input-group">
+                <label for="phone">📱 شماره موبایل:</label>
+                <input type="text" id="phone" name="phone" placeholder="مثلاً ۰۹۱۲۳۴۵۶۷۸۹" dir="rtl">
+            </div>
+
+            <div class="input-group">
+                <label for="otp">🔑 کد تأیید:</label>
+                <div class="otp-row">
+                    <input type="text" id="otp" name="otp" placeholder="کد ۶ رقمی" dir="rtl" maxlength="6">
+                    <button type="button" id="sendOtpBtn">📤 ارسال کد</button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-main">🚀 ورود</button>
+        </form>
+
+        <div class="hint">💡 کد تأیید به شماره موبایل شما ارسال می‌شود</div>
+    </div>
+
+    <script>
+        // این بخش فقط برای نمایش پیام‌هاست و به سرور وابسته نیست
+        const messageBox = document.getElementById('messageBox');
+
+        function showMessage(text, type) {
+            messageBox.textContent = text;
+            messageBox.className = 'message ' + type;
+        }
+
+        document.getElementById('sendOtpBtn').addEventListener('click', function() {
+            const phone = document.getElementById('phone').value.trim();
+            if (!phone) {
+                showMessage('لطفاً شماره موبایل را وارد کنید', 'error');
+                return;
+            }
+            // اینجا فقط یه پیام نمایشی نشون می‌ده (چون به سرور وصل نیست)
+            showMessage('✅ کد تأیید به شماره ' + phone + ' ارسال شد (حالت نمایشی)', 'success');
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const phone = document.getElementById('phone').value.trim();
+            const otp = document.getElementById('otp').value.trim();
+
+            if (!phone || !otp) {
+                showMessage('لطفاً همه فیلدها را پر کنید', 'error');
+                return;
+            }
+            // اینجا فقط یه پیام نمایشی نشون می‌ده
+            showMessage('✅ ورود موفقیت‌آمیز بود (حالت نمایشی)', 'success');
+        });
+    </script>
+</body>
+</html>
